@@ -776,6 +776,9 @@ class Admin extends Admin_Controller {
             
             $apoyo->comprobado_facturas = $total_comprobado_facturas>$apoyo->importe?$apoyo->importe:$total_comprobado_facturas;
             $apoyo->comprobado_depositos = $total_comprobado_depositos>$apoyo->importe?$apoyo->importe:$total_comprobado_depositos;
+
+
+
         }
        
              
@@ -818,7 +821,7 @@ class Admin extends Admin_Controller {
                 $this->excel->getActiveSheet()->setCellValue('H'.($inc+$extra), number_format($row->comprobado_facturas,2,'.',''));
                 $this->excel->getActiveSheet()->setCellValue('I'.($inc+$extra), number_format($row->comprobado_depositos,2,'.',''));
                 
-                $this->excel->getActiveSheet()->setCellValue('J'.($inc+$extra), number_format($row->importe-$row->comprobado,2,'.',''));
+                $this->excel->getActiveSheet()->setCellValue('J'.($inc+$extra), number_format($row->importe-($row->comprobado_facturas+$row->comprobado_depositos),2,'.',''));
                 //$this->excel->getActiveSheet()->setCellValue('H'.($inc+$extra), $row['tipo']=='fondo'?'Fondo Revolvente':'Apoyo');
                 $this->excel->getActiveSheet()->setCellValue('K'.($inc+$extra), $row->concepto);
                 
