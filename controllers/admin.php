@@ -768,14 +768,12 @@ class Admin extends Admin_Controller {
                 $total_comprobado_facturas = $comprobado['facturas']->total;
                 $total_comprobado_depositos = $comprobado['depositos']->total;
                  
-            $comprobado = $row->comprobado_facturas+$row->comprobado_depositos;
-                                //->get('apoyo_facturas')->row();
-                                          
+             $comprobado = $total_comprobado_facturas+$total_comprobado_depositos;
+                                
+           $apoyo->comprobado = ($comprobado)?($comprobado>$apoyo->importe?$apoyo->importe:$comprobado):0;
+            
             $apoyo->comprobado_facturas = $total_comprobado_facturas>$apoyo->importe?$apoyo->importe:$total_comprobado_facturas;
             $apoyo->comprobado_depositos = $total_comprobado_depositos>$apoyo->importe?$apoyo->importe:$total_comprobado_depositos;
-
-            $apoyo->comprobado = ($comprobado)?($comprobado>$apoyo->importe?$apoyo->importe:$comprobado->suma):0;
-            //$apoyo->comprobado = ($comprobado)?$comprobado->suma:0;
 
 
 
@@ -810,6 +808,7 @@ class Admin extends Admin_Controller {
         $extra = 3;
         foreach($apoyos_bd as $row)
         {
+            
                 $this->excel->getActiveSheet()->insertNewRowBefore($inc+$extra,1);
                 $this->excel->getActiveSheet()->setCellValue('A'.($inc+$extra),($row->tipo=='Plantel'?'P':'CE').pref_centro($row->clave,''));
                 $this->excel->getActiveSheet()->setCellValue('B'.($inc+$extra), $row->nombre_centro);
@@ -821,7 +820,7 @@ class Admin extends Admin_Controller {
                 $this->excel->getActiveSheet()->setCellValue('H'.($inc+$extra), number_format($row->comprobado_facturas,2,'.',''));
                 $this->excel->getActiveSheet()->setCellValue('I'.($inc+$extra), number_format($row->comprobado_depositos,2,'.',''));
                 
-                $this->excel->getActiveSheet()->setCellValue('J'.($inc+$extra), number_format($row->importe-($row->comprobado),2,'.',''));
+                $this->excel->getActiveSheet()->setCellValue('J'.($inc+$extra), number_format($row->importe-$row->comprobado,2,'.',''));
                 //$this->excel->getActiveSheet()->setCellValue('H'.($inc+$extra), $row['tipo']=='fondo'?'Fondo Revolvente':'Apoyo');
                 $this->excel->getActiveSheet()->setCellValue('K'.($inc+$extra), $row->concepto);
                 
